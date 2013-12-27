@@ -227,7 +227,7 @@ public class EdgeDetector
     /**
      * Returns the gradient magnitude of the subpixel which is one unit away from the pixel at (x,
      * y) in the direction (or opposite direction) of its gradient.
-     * 
+     *
      * @param gradientMap the non-suppressed gradients of an image
      * @param x x coordinate
      * @param y y coordinate
@@ -254,7 +254,7 @@ public class EdgeDetector
             xx = x - Math.cos(angle);
             yy = y - Math.sin(angle);
         }
-        // neigboring pixel coordinates
+        // neighboring pixel coordinates
         double x1 = Math.floor(xx);
         double x2 = Math.ceil(xx);
         double y1 = Math.floor(yy);
@@ -502,12 +502,12 @@ public class EdgeDetector
 
     /**
      * Returns true if the pixel at point q is connected to the pixel at point p. The two pixels are
-     * connected if point p is adjacent to point q and the rounded gradient at point p is in the
-     * direction from point p to q.
+     * connected if point p is adjacent to point q and the rounded gradient direction at point p is
+     * perpendicular to the direction from point p to q.
      *
      * @param suppressedGradients the suppressed gradient of an image
      * @param p starting point
-     * @param q test piont
+     * @param q test point
      * @return true if q is connected to p, false otherwise
      */
     private static boolean isConnected(Gradient[][] suppressedGradients, Point p, Point q)
@@ -517,22 +517,23 @@ public class EdgeDetector
         int qx = (int) q.getX();
         int qy = (int) q.getY();
 
-        // direction of gradient
+        // find direction perpendicular to gradient direction
         int xDiff = 0;
         int yDiff = 0;
+
         switch(suppressedGradients[py][px].getRoundedDirection()) {
             case N_S:
-                yDiff = 1;
+                xDiff = 1;
                 break;
             case E_W:
-                xDiff = 1;
+                yDiff = 1;
                 break;
             case NE_SW:
                 xDiff = 1;
-                yDiff = 1;
+                yDiff = -1;
                 break;
             case NW_SE:
-                xDiff = -1;
+                xDiff = 1;
                 yDiff = 1;
                 break;
         }
@@ -550,7 +551,7 @@ public class EdgeDetector
      * Returns the grayscale value given by applying the specified filter to the specified image at
      * the specified coordinates. The filter should be normalized such that it sums to 1.
      *
-     * @param image a 2D array of ints representing the greyscale values of an image
+     * @param image a 2D array of ints representing the grayscale values of an image
      * @param filter the filter being applied to the image
      * @param x x coordinate
      * @param y y coordinate
